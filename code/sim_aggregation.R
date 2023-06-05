@@ -1,13 +1,5 @@
 ##### Calculating rejection rate and aggregating all simulations in one dataset -----
 
-# Core Detection -----
-if(!"numCores" %in% ls()){
-  numCores <- detectCores() - 1
-}
-cl <- makeCluster(numCores)
-registerDoParallel(cl)
-
-
 # Generate simulated dataset if it does not exist in the environment -----
 if(!"sim_methods" %in% ls()){
   source("code/data_generation.R")
@@ -32,8 +24,6 @@ simulation <- foreach::foreach(nobs = as.list(names(sim_methods)),
                      
                      return(methods)
                    }
-
-stopCluster(cl)
 
 saveRDS(simulation, "results/simulation.RDS")
 

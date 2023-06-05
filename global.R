@@ -23,9 +23,21 @@ if (!require('doSNOW')) {
   install.packages('doSNOW')
   library('doSNOW')
 }
+if (!require('dplyr')) {
+  install.packages('dplyr')
+  library('dplyr')
+}
 if (!require('foreach')) {
   install.packages('foreach')
   library('foreach')
+}
+if (!require('ggplot2')) {
+  install.packages('ggplot2')
+  library('ggplot2')
+}
+if (!require('ggthemes')) {
+  install.packages('ggthemes')
+  library('ggthemes')
 }
 if (!require('progress')) {
   install.packages('progress')
@@ -43,8 +55,11 @@ for(function_file in function_files){
 rm(function_files, function_file)
 
 
-# Set available number of cores -----
+# Set available number of cores and set up cluster -----
 numCores <- detectCores() - 1
+
+cl <- makeCluster(numCores)
+registerDoParallel(cl)
 
 
 # Set the number of iterations in each simulation -----
@@ -74,15 +89,16 @@ if(!"sim_methods" %in% ls()){
 
 
 # Calculation of the rejection rate and aggregating simulation results -----
-if(!"simulation" %in% ls()){
+if("sim_methods" %in% ls()){
   source("code/sim_aggregation.R")
 }
 
 
 # Plotting figures relevant for this thesis -----
 if("simulation" %in% ls()){
-  source("code/thesis_results.R")
+  source("code/figures.R")
 }
 
 
+stopCluster(cl)
 

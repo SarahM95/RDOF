@@ -1,13 +1,5 @@
 ##### Data Generation followed by p-value calculation -----
 
-# Core Detection -----
-if(!"numCores" %in% ls()) {
-  numCores <- detectCores() - 1
-}
-cl <- makeCluster(numCores)
-registerDoParallel(cl)
-
-
 # Number of iterations -----
 if(!"n_sim" %in% ls()){
   n_sim <- 10000
@@ -74,8 +66,6 @@ sim_methods <- foreach::foreach (
       param_control = setting[2]
     ))[, c("K", "treat_control_param", "n_sim", "n_obs") := list(k, paste(setting[1], "-", setting[2]), i, nobs)]
   }
-
-stopCluster(cl)
 
 saveRDS(sim_methods, "results/sim_methods.RDS")
 
